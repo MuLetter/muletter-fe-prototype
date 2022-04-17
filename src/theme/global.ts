@@ -20,6 +20,10 @@ const GlobalTheme = {
       "*::-webkit-scrollbar": {
         display: "none",
       },
+      ".chakra-alert": {
+        background: "#121215 !important",
+        color: "#fff !important",
+      },
     }),
   },
 };
