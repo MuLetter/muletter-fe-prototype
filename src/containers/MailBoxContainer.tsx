@@ -6,12 +6,16 @@ import MailBoxConnector from "../store/mailbox/connector";
 
 type Props = ConnectedProps<typeof MailBoxConnector>;
 
-function MailBoxContainer({ getMail, mail, mailBox }: Props) {
+function MailBoxContainer({ getMail, mail, mailBox, clearStore }: Props) {
   const { id } = useParams();
 
   React.useEffect(() => {
     getMail(id as string);
-  }, [getMail, id]);
+
+    return () => {
+      clearStore();
+    };
+  }, [getMail, id, clearStore]);
 
   return <MailBoxComponent id={id} mail={mail} mailBox={mailBox} />;
 }

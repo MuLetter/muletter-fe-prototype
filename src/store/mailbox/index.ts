@@ -5,6 +5,7 @@ import {
   GET_MAIL_SUCCESS,
   Mail,
   MailBox,
+  POST_MAILBOX_SUCCESS,
 } from "./types";
 
 type MailBoxStore = {
@@ -30,6 +31,10 @@ const MailBoxReducer = handleActions<MailBoxStore, any>(
       ...state,
       mailBox: action.payload.mailBox,
       mail: action.payload.mail,
+    }),
+    [POST_MAILBOX_SUCCESS]: (state, action) => ({
+      ...state,
+      mailBox: action.payload.mailBox,
     }),
     [CLEAR("mailbox")]: (state, action) => ({
       ...state,

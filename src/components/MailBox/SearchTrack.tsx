@@ -1,4 +1,4 @@
-import { Flex, Image, Text, useToast } from "@chakra-ui/react";
+import { Flex, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import styled, { css } from "styled-components";
@@ -67,25 +67,16 @@ function TrackList({ mode, tracks, selectTrack }: ListProps) {
   );
 }
 
-type Props = ConnectedProps<typeof AuthConnector>;
+type Props = ConnectedProps<typeof AuthConnector> & {
+  selTracks: Track[];
+  selectTrack: (selTrack: Track) => void;
+};
 
-function SearchTrack({ spotify }: Props) {
-  const toast = useToast();
+function SearchTrack({ spotify, selTracks, selectTrack }: Props) {
   const [isSearch, setIsSearch] = React.useState<boolean>(false);
   const [query, setQuery] = React.useState<string>("");
-  const [selTracks, setSelTracks] = React.useState<Track[]>([]);
-  const [searchTracks, setSearchTracks] = React.useState<Track[]>([]);
 
-  const selectTrack = React.useCallback(
-    (selTrack: Track) => {
-      setSelTracks((prev) => prev.concat(selTrack));
-      toast({
-        position: "bottom",
-        title: "음악이 추가되었습니다.",
-      });
-    },
-    [toast]
-  );
+  const [searchTracks, setSearchTracks] = React.useState<Track[]>([]);
 
   const generateTrackItem = React.useCallback((tracks: any) => {
     const items = tracks["items"];
