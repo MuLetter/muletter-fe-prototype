@@ -12,6 +12,7 @@ import RootSaga from "./store/saga";
 import { getToken } from "./store/auth/actions";
 import { BrowserRouter as Router } from "react-router-dom";
 import ScrollToTop from "./utils/ScrollToTop";
+import AlertListener from "./containers/common/AlertListener";
 
 const sagaMW = createSagaMW();
 const store = createStore(
@@ -28,6 +29,7 @@ root.render(
     <ChakraProvider theme={theme}>
       <Router>
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+        <AlertListener />
         <ScrollToTop />
         <App />
       </Router>
