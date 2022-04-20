@@ -1,9 +1,17 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 
-export function ContainerMar80({ children }: React.PropsWithChildren<any>) {
+export function ContainerMar80({
+  children,
+  ...props
+}: React.PropsWithChildren<any>) {
   return (
-    <Box margin="0 80px 0" width="calc(100% - 160px)" minWidth="1280px">
+    <Box
+      margin="0 80px 0"
+      width="calc(100% - 160px)"
+      minWidth="1280px"
+      {...props}
+    >
       {children}
     </Box>
   );
