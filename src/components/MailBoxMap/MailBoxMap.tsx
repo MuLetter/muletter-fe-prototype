@@ -54,8 +54,13 @@ function MailBoxMap() {
             refMapCenter.current!.getBoundingClientRect();
           const { x: cx, y: cy } = refCenter.current!.getBoundingClientRect();
 
+          console.log(mcx, mcy);
+          console.log(cx, cy);
+
           const errX = cx - mcx;
           const errY = cy - mcy;
+
+          console.log(errX, errY);
 
           setCenterCoord(
             convertPosToCoord(mapSize / 2, {
@@ -151,6 +156,7 @@ function MailBoxMap() {
         height="600px"
         background="linear-gradient(90deg, #4568DC 0%, #B06AB3 100%)"
         transition="0.2s"
+        transformOrigin="0% 0%"
       >
         <Box
           ref={refMapCenter}
@@ -159,7 +165,14 @@ function MailBoxMap() {
           left="300px"
           width="0"
           height="0"
-        />
+          overflow="visible"
+        >
+          <Box
+            position="absolute"
+            style={convertCoordToPos(mapSize, centerCoord)}
+            background="#fff"
+          />
+        </Box>
       </Box>
       <Flex
         ref={refCenter}
@@ -168,14 +181,7 @@ function MailBoxMap() {
         left="300px"
         width="0"
         height="0"
-        overflow="visible"
-      >
-        <Box
-          position="absolute"
-          style={convertCoordToPos(mapSize, centerCoord)}
-          background="#fff"
-        />
-      </Flex>
+      />
     </Box>
   );
 }

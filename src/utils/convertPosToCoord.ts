@@ -7,24 +7,24 @@ function convertPosToCoord(mapSize: number, item: Coord): Coord {
     _y = 0;
 
   // 2사분면
-  if (x >= 0 && y >= 0) {
-    _x = x * -1;
-    _y = y;
+  if (x <= 0 && y <= 0) {
+    _x = x;
+    _y = y * -1;
   }
   // 1사분면
-  else if (x <= 0 && y >= 0) {
-    _x = x * -1;
-    _y = y;
+  else if (x >= 0 && y <= 0) {
+    _x = x;
+    _y = y * -1;
   }
   // 4사분면
-  else if (x <= 0 && y <= 0) {
-    _x = x * -1;
-    _y = y;
+  else if (x >= 0 && y >= 0) {
+    _x = x;
+    _y = y * -1;
   }
   // 3사분면
-  else if (x >= 0 && y <= 0) {
-    _x = x * -1;
-    _y = y;
+  else if (x <= 0 && y >= 0) {
+    _x = x;
+    _y = y * -1;
   }
 
   _x = (100 * _x) / mapSize;

@@ -35,9 +35,9 @@ function convertCoordToPos(mapSize: number, item: Coord): CSSProperties {
     _y = y * -1;
   }
 
-  const width = (48 * (600 / 2)) / mapSize;
-  _x = ((600 / 2) * _x) / 100 - width / 2;
-  _y = ((600 / 2) * _y) / 100 - width / 2;
+  const width = (48 * 300) / mapSize;
+  _x = (300 * _x) / 100 - width / 2;
+  _y = (300 * _y) / 100 - width / 2;
   const height = width;
 
   return {
