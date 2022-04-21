@@ -15,9 +15,16 @@ function MailBoxMap() {
   const refMaxSize = React.useRef<Coord | null>({ x: 600, y: 600 });
   const refMaxPoint = React.useRef<Coord | null>({ x: 0, y: 0 });
   const refScale = React.useRef<number>(1);
+  const [maxItem, setMaxItem] = React.useState<Coord>({ x: 0, y: 0 });
 
   const [mapSize, setMapSize] = React.useState<number>(300);
   const [centerCoord, setCenterCoord] = React.useState<Coord>({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    const offset = 100 / refScale.current;
+
+    console.log("offset", offset);
+  }, [centerCoord]);
 
   React.useEffect(() => {
     console.log("now center", centerCoord);
@@ -171,6 +178,11 @@ function MailBoxMap() {
             position="absolute"
             style={convertCoordToPos(mapSize, centerCoord)}
             background="#fff"
+          />
+          <Box
+            position="absolute"
+            background="#fff"
+            style={convertCoordToPos(mapSize, maxItem)}
           />
         </Box>
       </Box>
