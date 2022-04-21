@@ -1,34 +1,68 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import React from "react";
+import { ConnectedProps } from "react-redux";
 import { Coord } from "../../store/mailbox/types";
+import MailBoxMapConnector from "../../store/mailBoxMap/connector";
+import { MailBox } from "../../store/mailBoxMap/types";
 import convertCoordToPos from "../../utils/convertCoordToPos";
 import convertPosToCoord from "../../utils/convertPosToCoord";
 import createWheelStopListener from "../../utils/createWheelStopListener";
 
-function MailBoxMap() {
+type ItemProps = {
+  mapSize: number;
+  mailBox: MailBox;
+};
+
+function MapItem({ mapSize, mailBox }: ItemProps) {
+  return (
+    <Box
+      position="absolute"
+      style={convertCoordToPos(mapSize, mailBox.point!)}
+      background="#fff"
+      borderRadius="100%"
+    >
+      <Image
+        src={`${process.env.REACT_APP_API_SERVER}${mailBox.imagePath}`}
+        width="100%"
+        height="100%"
+        objectFit="cover"
+        borderRadius="100%"
+      />
+    </Box>
+  );
+}
+
+type Props = ConnectedProps<typeof MailBoxMapConnector>;
+
+function MailBoxMap({ getMap, mailBoxes }: Props) {
   const refZoomOuter = React.useRef<HTMLDivElement>(null);
   const refZoom = React.useRef<HTMLDivElement>(null);
   const refMapCenter = React.useRef<HTMLDivElement>(null);
   const refCenter = React.useRef<HTMLDivElement>(null);
 
-  const refMousePoint = React.useRef<Coord | null>({ x: 0, y: 0 });
+  const refMousePoint = React.useRef<Coord>({ x: 0, y: 0 });
   const refMaxSize = React.useRef<Coord | null>({ x: 600, y: 600 });
   const refMaxPoint = React.useRef<Coord | null>({ x: 0, y: 0 });
   const refScale = React.useRef<number>(1);
-  const [maxItem, setMaxItem] = React.useState<Coord>({ x: 0, y: 0 });
+
+  const refStart = React.useRef<Coord>({ x: 0, y: 0 });
+  const refMoving = React.useRef<boolean>(false);
 
   const [mapSize, setMapSize] = React.useState<number>(300);
   const [centerCoord, setCenterCoord] = React.useState<Coord>({ x: 0, y: 0 });
 
   React.useEffect(() => {
     const offset = 100 / refScale.current;
-
-    console.log("offset", offset);
-  }, [centerCoord]);
-
-  React.useEffect(() => {
+    const { x, y } = centerCoord;
     console.log("now center", centerCoord);
-  }, [centerCoord]);
+    console.log("offset", offset);
+
+    getMap({
+      centerX: x,
+      centerY: y,
+      pointOffset: offset,
+    });
+  }, [centerCoord, getMap]);
 
   const setTransform = React.useCallback(() => {
     if (refZoom && refZoom.current) {
@@ -81,6 +115,37 @@ function MailBoxMap() {
     }
   }, []);
 
+  // Drag Event
+  React.useEffect(() => {
+    if (refZoom && refZoom.current) {
+      refZoom.current.onmousedown = (e) => {
+        e.preventDefault();
+
+        const { x: pointX, y: pointY } = refMousePoint.current;
+        refStart.current = {
+          x: e.clientX - pointX,
+          y: e.clientY - pointY,
+        };
+        refMoving.current = true;
+      };
+      refZoom.current.onmouseup = (e) => {
+        refMoving.current = false;
+      };
+      refZoom.current.onmousemove = (e) => {
+        e.preventDefault();
+        if (!refMoving.current) {
+          return;
+        }
+
+        refMousePoint.current = {
+          x: e.clientX - refStart.current.x,
+          y: e.clientY - refStart.current.y,
+        };
+        setTransform();
+      };
+    }
+  }, [setTransform]);
+
   // Wheel Event
   React.useEffect(() => {
     if (refZoom && refZoom.current)
@@ -92,8 +157,8 @@ function MailBoxMap() {
               refZoomOuter.current.getBoundingClientRect();
 
             // zoom control 값
-            // zoomX = 0;
-            // zoomY = 0;
+            zoomX = 0;
+            zoomY = 0;
 
             let pointX = 0,
               pointY = 0;
@@ -108,11 +173,11 @@ function MailBoxMap() {
               delta = e.deltaY;
 
             let nextScale = 0;
-            if (delta < 0) nextScale = refScale.current + 0.2;
-            else nextScale = refScale.current - 0.2;
+            if (delta < 0) nextScale = refScale.current + 0.4;
+            else nextScale = refScale.current - 0.4;
             if (nextScale < 1) refScale.current = 1;
             else {
-              if (nextScale > 2) refScale.current = 2;
+              if (nextScale > 3) refScale.current = 3;
               else refScale.current = nextScale;
             }
 
@@ -161,7 +226,7 @@ function MailBoxMap() {
         position="relative"
         width="600px"
         height="600px"
-        background="linear-gradient(90deg, #4568DC 0%, #B06AB3 100%)"
+        // background="linear-gradient(90deg, #4568DC 0%, #B06AB3 100%)"
         transition="0.2s"
         transformOrigin="0% 0%"
       >
@@ -174,16 +239,9 @@ function MailBoxMap() {
           height="0"
           overflow="visible"
         >
-          <Box
-            position="absolute"
-            style={convertCoordToPos(mapSize, centerCoord)}
-            background="#fff"
-          />
-          <Box
-            position="absolute"
-            background="#fff"
-            style={convertCoordToPos(mapSize, maxItem)}
-          />
+          {mailBoxes?.map((mailBox) => (
+            <MapItem key={mailBox._id} mailBox={mailBox} mapSize={mapSize} />
+          ))}
         </Box>
       </Box>
       <Flex
@@ -198,4 +256,4 @@ function MailBoxMap() {
   );
 }
 
-export default MailBoxMap;
+export default MailBoxMapConnector(MailBoxMap);
