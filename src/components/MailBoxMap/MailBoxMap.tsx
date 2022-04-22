@@ -214,45 +214,48 @@ function MailBoxMap({ getMap, mailBoxes }: Props) {
   }, [setTransform]);
 
   return (
-    <Box
-      position="relative"
-      ref={refZoomOuter}
-      width="600px"
-      height="600px"
-      overflow="hidden"
-    >
+    <Flex flex={1} alignItems="center" justifyContent="center">
       <Box
-        ref={refZoom}
         position="relative"
+        ref={refZoomOuter}
         width="600px"
         height="600px"
-        // background="linear-gradient(90deg, #4568DC 0%, #B06AB3 100%)"
-        transition="0.2s"
-        transformOrigin="0% 0%"
+        overflow="hidden"
+        boxShadow="1px 1px 20px rgba(255,255,255,0.3)"
       >
         <Box
-          ref={refMapCenter}
+          ref={refZoom}
+          position="relative"
+          width="600px"
+          height="600px"
+          // background="linear-gradient(90deg, #4568DC 0%, #B06AB3 100%)"
+          transition="0.2s"
+          transformOrigin="0% 0%"
+        >
+          <Box
+            ref={refMapCenter}
+            position="absolute"
+            top="300px"
+            left="300px"
+            width="0"
+            height="0"
+            overflow="visible"
+          >
+            {mailBoxes?.map((mailBox) => (
+              <MapItem key={mailBox._id} mailBox={mailBox} mapSize={mapSize} />
+            ))}
+          </Box>
+        </Box>
+        <Flex
+          ref={refCenter}
           position="absolute"
           top="300px"
           left="300px"
           width="0"
           height="0"
-          overflow="visible"
-        >
-          {mailBoxes?.map((mailBox) => (
-            <MapItem key={mailBox._id} mailBox={mailBox} mapSize={mapSize} />
-          ))}
-        </Box>
+        />
       </Box>
-      <Flex
-        ref={refCenter}
-        position="absolute"
-        top="300px"
-        left="300px"
-        width="0"
-        height="0"
-      />
-    </Box>
+    </Flex>
   );
 }
 
