@@ -1,18 +1,11 @@
-import {
-  AspectRatio,
-  Avatar,
-  AvatarGroup,
-  Box,
-  Flex,
-  Image,
-  Text,
-} from "@chakra-ui/react";
+import { AspectRatio, Box, Flex, Image, Text } from "@chakra-ui/react";
 import { ContainerMar16 } from "./common/Container";
 import { ContentTitle } from "./common/PageTitle";
 import assets from "../assets";
 import RegistMailBox from "./MailBox/RegistMailBox";
-import { MailBox, Track } from "../store/mailbox/types";
+import { MailBox } from "../store/mailbox/types";
 import { useNavigate } from "react-router-dom";
+import TracksAvatar from "./MailBox/TracksAvatar";
 
 function MailBoxIcon() {
   return (
@@ -22,33 +15,6 @@ function MailBoxIcon() {
         2
       </Text>
     </Flex>
-  );
-}
-
-type TracksProps = {
-  tracks: Track[];
-};
-
-function MailBoxTracks({ tracks }: TracksProps) {
-  return (
-    <Box>
-      <AvatarGroup
-        size="xs"
-        max={4}
-        sx={{
-          "& > .chakra-avatar__excess": {
-            fontSize: "8px",
-            fontWeight: "bold",
-            background: "transparent",
-            border: "2px solid #fff",
-          },
-        }}
-      >
-        {tracks.map((tracks) => (
-          <Avatar key={tracks.trackId} src={tracks.image} size="xs" />
-        ))}
-      </AvatarGroup>
-    </Box>
   );
 }
 
@@ -100,7 +66,7 @@ function MailBoxItem({ mailBox }: ItemProps) {
           flex={1}
         >
           <MailBoxIcon />
-          <MailBoxTracks tracks={mailBox.tracks} />
+          <TracksAvatar tracks={mailBox.tracks} />
         </Flex>
       </Flex>
     </AspectRatio>
