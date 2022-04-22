@@ -2,6 +2,7 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { ConnectedProps } from "react-redux";
 import MailBoxMapConnector from "../../store/mailBoxMap/connector";
 import { MailBox } from "../../store/mailBoxMap/types";
+import TracksAvatar from "../MailBox/TracksAvatar";
 
 type ItemProps = {
   mailBox: MailBox;
@@ -11,26 +12,26 @@ function MailBoxItem({ mailBox }: ItemProps) {
   return (
     <Flex
       width="100%"
-      height="100px"
+      height="112px"
       alignItems="center"
       padding="0 32px 0 16px"
-      margin="0 0 16px"
+      margin="0 0 24px"
       overflow="hidden"
       columnGap="8px"
       direction="row"
     >
       <Image
         src={`${process.env.REACT_APP_API_SERVER}${mailBox.imagePath}`}
-        width="100px"
-        height="100px"
+        width="120px"
+        height="120px"
       />
-      <Flex width="calc(100% - 100px)" height="100%">
+      <Flex flex="1" height="100%" direction="column">
         <Box flex="1" overflow="hidden">
           <Text
             display="block"
             width="100%"
             fontSize="16px"
-            fontWeight="medium"
+            fontWeight="bold"
             height="calc(16px * 1.5)"
             whiteSpace="nowrap"
             overflow="hidden"
@@ -46,6 +47,7 @@ function MailBoxItem({ mailBox }: ItemProps) {
             overflow="hidden"
             textOverflow="ellipsis"
             wordBreak="break-all"
+            color="#e5e5e5"
             sx={{
               WebkitLineClamp: 3,
               WebkitBoxOrient: "vertical",
@@ -62,6 +64,9 @@ function MailBoxItem({ mailBox }: ItemProps) {
             PageMaker including versions of Lorem Ipsum.
           </Text>
         </Box>
+        <Flex margin="8px 0 0" direction="row" justifyContent="flex-end">
+          <TracksAvatar tracks={mailBox.tracks} />
+        </Flex>
       </Flex>
     </Flex>
   );
