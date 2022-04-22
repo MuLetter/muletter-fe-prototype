@@ -35,6 +35,7 @@ export type Mail = {
 export type MailBox = {
   _id: string;
   title: string;
+  description: string;
   imagePath?: string;
   tracks: Track[];
   point?: Coord;
