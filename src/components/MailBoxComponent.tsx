@@ -48,6 +48,19 @@ function Letter({ mailBox, mail, setViewTitle }: LetterProps) {
   //   }
   // }, [paperEnd]);
 
+  // Infinite Scroll
+  React.useEffect(() => {
+    if (refPaper && refPaper.current) {
+      refPaper.current.onscroll = (e) => {
+        if (refPaper && refPaper.current) {
+          const endScroll =
+            refPaper!.current?.scrollHeight - refPaper!.current?.offsetHeight;
+          const nowScroll = refPaper!.current!.scrollTop;
+        }
+      };
+    }
+  }, []);
+
   // paper animation end
   React.useEffect(() => {
     if (refPaper && refPaper.current) {

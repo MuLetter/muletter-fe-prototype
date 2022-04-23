@@ -13,12 +13,17 @@ type MailBoxStore = {
 
   mailBox: MailBox | null;
   mail: Mail | null;
+
+  page: number | null;
+  lastPage: number | null;
 };
 
 const mailBoxStore: MailBoxStore = {
   mailBoxes: null,
   mailBox: null,
   mail: null,
+  page: null,
+  lastPage: null,
 };
 
 const MailBoxReducer = handleActions<MailBoxStore, any>(
@@ -29,8 +34,7 @@ const MailBoxReducer = handleActions<MailBoxStore, any>(
     }),
     [GET_MAIL_SUCCESS]: (state, action) => ({
       ...state,
-      mailBox: action.payload.mailBox,
-      mail: action.payload.mail,
+      ...action.payload,
     }),
     [POST_MAILBOX_SUCCESS]: (state, action) => ({
       ...state,
@@ -40,6 +44,8 @@ const MailBoxReducer = handleActions<MailBoxStore, any>(
       ...state,
       mailBoxes: null,
       mailBox: null,
+      page: null,
+      lastPage: null,
     }),
   },
   mailBoxStore
