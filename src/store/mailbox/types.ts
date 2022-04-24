@@ -8,6 +8,13 @@ export const [GET_MAIL, GET_MAIL_SUCCESS, GET_MAIL_FAILURE] =
 export const [POST_MAILBOX, POST_MAILBOX_SUCCESS, POST_MAILBOX_FAILURE] =
   createActionTypes("mailbox/post_mailbox");
 
+export type GetMailBoxQuery = {
+  id: string;
+  query: {
+    page?: number;
+  };
+};
+
 // Store Types
 export type Track = {
   trackId: string;

@@ -6,16 +6,25 @@ import { Mail, MailBox } from "../store/mailbox/types";
 import BackgroundListener from "./common/BackgroundListener";
 import { ContentTitle } from "./common/PageTitle";
 import Tracks from "./common/Tracks";
+import { Track } from "../store/mailbox/types";
 
 type LetterProps = {
   mailBox: MailBox | null;
   mail: Mail | null;
+  mailTracks: Track[] | null;
   setViewTitle: (state: boolean) => void;
+  nextPage: () => void;
 };
 
 const LazyMarkerImage = lazy(() => import("./MailBox/MarkerImage"));
 
-function Letter({ mailBox, mail, setViewTitle }: LetterProps) {
+function Letter({
+  mailBox,
+  mail,
+  mailTracks,
+  setViewTitle,
+  nextPage,
+}: LetterProps) {
   const refBlock = React.useRef<HTMLDivElement>(null);
   const refMarker = React.useRef<HTMLDivElement>(null);
   const refLid = React.useRef<HTMLDivElement>(null);
@@ -56,10 +65,12 @@ function Letter({ mailBox, mail, setViewTitle }: LetterProps) {
           const endScroll =
             refPaper!.current?.scrollHeight - refPaper!.current?.offsetHeight;
           const nowScroll = refPaper!.current!.scrollTop;
+
+          if (endScroll <= nowScroll) nextPage();
         }
       };
     }
-  }, []);
+  }, [nextPage]);
 
   // paper animation end
   React.useEffect(() => {
@@ -128,7 +139,7 @@ function Letter({ mailBox, mail, setViewTitle }: LetterProps) {
           className="letter-paper"
           paperStart={paperStart}
         >
-          {paperEnd && mail && <Tracks tracks={mail.tracks} />}
+          {paperEnd && mailTracks && <Tracks tracks={mailTracks} />}
         </LetterPaper>
 
         <LetterFront ref={refFront} className="letter-front">
@@ -303,9 +314,11 @@ type Props = {
   id?: string;
   mailBox: MailBox | null;
   mail: Mail | null;
+  mailTracks: Track[] | null;
+  nextPage: () => void;
 };
 
-function MailBoxComponent({ id, mailBox, mail }: Props) {
+function MailBoxComponent({ id, mailBox, mail, nextPage, mailTracks }: Props) {
   const [viewTitle, setViewTitle] = React.useState<boolean>(false);
   return (
     <>
@@ -322,7 +335,13 @@ function MailBoxComponent({ id, mailBox, mail }: Props) {
         alignItems="center"
         minHeight="1020px"
       >
-        <Letter mail={mail} mailBox={mailBox} setViewTitle={setViewTitle} />
+        <Letter
+          mail={mail}
+          mailBox={mailBox}
+          setViewTitle={setViewTitle}
+          nextPage={nextPage}
+          mailTracks={mailTracks}
+        />
       </Flex>
     </>
   );
