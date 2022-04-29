@@ -36,29 +36,43 @@ function MailBoxItem({ mailBox }: ItemProps) {
       cursor="pointer"
       onClick={() => navigate(`/mailbox/${mailBox._id}`)}
       sx={{
-        perspective: "50px",
+        transformOrigin: "50% 50%",
         "&:hover .cap": {
           transformOrigin: "50% 0%",
-          transform: "rotateX(20deg)",
+          transform: "rotateX(25deg)",
         },
       }}
     >
       <Flex
+        position="relative"
         direction="column"
         margin="16px 0 16px"
         justifyContent="flex-start !important"
+        overflow="visible"
+        sx={{
+          perspective: "2000px",
+        }}
       >
-        <AspectRatio width="calc(100% - 32px)" ratio={4 / 2.25}>
+        <AspectRatio
+          width="calc(100% - 32px)"
+          ratio={4 / 2.25}
+          transition="0.3s"
+          position="absolute"
+        >
+          <Box background="#121212" />
+        </AspectRatio>
+        <AspectRatio
+          className="cap"
+          width="calc(100% - 32px)"
+          ratio={4 / 2.25}
+          transition="0.3s"
+        >
           <>
-            <Box background="#000" />
+            {/* <Box background="#000" /> */}
             {mailBox.imagePath !== "" && (
               <Image
-                className="cap"
                 alt="이미지"
                 src={`${process.env.REACT_APP_API_SERVER}${mailBox.imagePath}`}
-                sx={{
-                  transition: ".3s",
-                }}
               />
             )}
             <Box background="rgba(51, 51, 51, 0.3)" />
@@ -68,6 +82,7 @@ function MailBoxItem({ mailBox }: ItemProps) {
             </Text>
           </>
         </AspectRatio>
+
         <Flex
           margin="-16px 0 0"
           padding="0 8px"
